@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const { restart } = require('nodemon');
+const { sequelize } = require('./src/models/index.js');
+const config = require('./src/config/config');
 
 const app = express();
 app.use(morgan('combined'));
@@ -12,27 +14,9 @@ app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: true }));
 const clients = [];
 
-app.get('/', (req, res) => {
-  // db.collection('clients')
-  //   .find()
-  //   .toArray()
-  //   .then((results) => {
-  //     console.log(results);
-  //   })
-  //   .res()
-  //   .catch((error) => console.error(error));
-});
+require('./src/routes')(app);
 
-app.post('/registerClient', (req, res) => {
-  res.send({
-    message: 'Registrado com sucesso!'
-  });
-  // clientsCollection
-  //   .insertOne(req.body)
-  //   .then((result) => {
-  //     res.redirect('/');
-  //   })
-  //   .catch((error) => console.error(error));
+sequelize.sync().then(() => {
+  app.listen(config.port);
+  console.log(`Server started on port ${config.port}`);
 });
-
-app.listen(process.env.PORT || 8081);
