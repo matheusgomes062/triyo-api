@@ -1,10 +1,11 @@
-const RegisterClientController = require('./controllers/RegisterClientController');
-const RegisterClientPolicy = require('./policies/RegisterClientPolicy');
+const ClientController = require('./controllers/ClientController');
+// const RegisterClientPolicy = require('./policies/RegisterClientPolicy');
 
 module.exports = (app) => {
   app.post(
     '/registerClient',
-    RegisterClientPolicy.register,
-    RegisterClientController.register
+    // RegisterClientPolicy.register,
+    ClientController.register
   );
+  app.get('/clients', ClientController.index);
 };
